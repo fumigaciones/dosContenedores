@@ -9,14 +9,14 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:  # Cambiado de 'build' a 'deploy'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
+      - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
@@ -27,12 +27,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+      # Eliminar este paso si no estás construyendo ni empujando nuevas imágenes.
+      # - name: Build and push Docker images
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
       - name: Deploy to Docker Compose
         env:
